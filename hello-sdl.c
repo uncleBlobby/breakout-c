@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 800;
@@ -56,6 +57,8 @@ int main(int argc, char* args[]) {
     Game game;
     Game* game_ptr = &game;
 
+    bool quit = false;
+
     SDL_Window* window = NULL;
 
     SDL_Surface* screenSurface = NULL;
@@ -72,16 +75,31 @@ int main(int argc, char* args[]) {
         if( window == NULL ){
             printf("Window could not be created. SDL_Error: %s\n", SDL_GetError());
         } else {
+            while (!quit) {
+                SDL_Event event;
+                while (SDL_PollEvent(&event)){
+                    // decide what to do with the current event
+                    if( event.type == SDL_QUIT){
+                        quit = true;
+                        SDL_Log("Program exited.");
+                        break;
+                    }
+                }
 
+                // update game state, draw the current frame
             screenSurface = SDL_GetWindowSurface(window);
 
             SDL_FillRect(screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0, 0, 0));
-            SDL_UpdateWindowSurface(window);
+            
 
             drawBoard(screenSurface, window, game_ptr);
             drawPaddle(screenSurface, window, game_ptr);
             drawBall(screenSurface, window, game_ptr);
-            SDL_Delay(2000);
+            //SDL_Delay(2000);
+            SDL_UpdateWindowSurface(window);
+
+            }
+
         }
     }
 
@@ -110,7 +128,7 @@ void drawBoard(SDL_Surface* screen, SDL_Window* window, Game* game) {
             SDL_FillRect(screen, &rect, SDL_MapRGB( screen->format, 255, 0, 0));
         }
     }
-    SDL_UpdateWindowSurface(window);
+    //SDL_UpdateWindowSurface(window);
 }
 
 void drawPaddle(SDL_Surface* screen, SDL_Window* window, Game* game) {
@@ -118,7 +136,7 @@ void drawPaddle(SDL_Surface* screen, SDL_Window* window, Game* game) {
     Paddle paddle = {rect: rect, x_velocity: 0, y_velocity: 0};
     game->paddle = paddle;
     SDL_FillRect(screen, &rect, SDL_MapRGB( screen->format, 0, 255, 0));
-    SDL_UpdateWindowSurface(window);
+    //SDL_UpdateWindowSurface(window);
 }
 
 void drawBall(SDL_Surface* screen, SDL_Window* window, Game* game) {
@@ -126,5 +144,5 @@ void drawBall(SDL_Surface* screen, SDL_Window* window, Game* game) {
     Ball ball = {rect: rect, x_velocity: 0, y_velocity: 0};
     game->ball = ball;
     SDL_FillRect(screen, &rect, SDL_MapRGB( screen->format, 255, 255, 255));
-    SDL_UpdateWindowSurface(window);
+    //SDL_UpdateWindowSurface(window);
 }
