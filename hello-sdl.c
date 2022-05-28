@@ -21,6 +21,11 @@ typedef struct {
 } Position;
 
 typedef struct {
+    int x;
+    int y;
+} Velocity;
+
+typedef struct {
     SDL_Rect rect;
     bool is_alive;
 } Brick;
@@ -36,8 +41,7 @@ typedef struct {
 
 typedef struct {
     SDL_Rect rect;
-    int x_velocity;
-    int y_velocity;
+    Velocity velocity;
     Position position;
     int height;
     int width;
@@ -53,6 +57,7 @@ int initPaddle();
 int initBall();
 
 void movePaddle();
+void stopPaddle();
 void updatePaddleState();
 
 void drawBoard();
@@ -107,15 +112,20 @@ int main(int argc, char* args[]) {
                         SDL_Log("Program exited.");
                         break;
                     }
+
+                    if( event.type == SDL_KEYDOWN ){
+                        movePaddle(paddle_ptr, event.key.keysym.sym);
+                    }
+                    if( event.type == SDL_KEYUP ){
+                        stopPaddle(paddle_ptr);
+                    } 
                 }
 
             // update game state, draw the current frame
             // update game state
             // -- test: move paddle right
             
-            movePaddle(paddle_ptr);
-            
-            
+            updatePaddleState(paddle_ptr);
             
             
             // draw current frame
@@ -157,6 +167,8 @@ int initPaddle(Paddle* paddle) {
         paddle->position.y = 550;
         paddle->width = 100;
         paddle->height = 20;
+        paddle->velocity.x = 0;
+        paddle->velocity.y = 0;
         paddle->rect.x = paddle->position.x;
         paddle->rect.y = paddle->position.y;
         paddle->rect.w = paddle->width;
@@ -185,17 +197,28 @@ int initBall(Ball* ball) {
     }
 }
 
-void movePaddle(Paddle* paddle) {
+void movePaddle(Paddle* paddle, SDL_KeyCode key) {
     if (paddle){
-        // this works, now need to move the paddle with controls!
-        paddle->position.x -= 1;
-        updatePaddleState(paddle);
-        printf("Paddle position x: %d\n", paddle->position.x);
-    } 
+        if (key == SDLK_a){
+            printf("Pressing a.\n");
+            paddle->velocity.x = -1;
+        }
+        if (key == SDLK_d){
+            printf("Pressing d.\n");
+            paddle->velocity.x = 1;
+        }
+    }
+}
+
+void stopPaddle(Paddle* paddle) {
+    if (paddle){
+        paddle->velocity.x = 0;
+    }
 }
 
 void updatePaddleState(Paddle* paddle) {
     if (paddle){
+        paddle->position.x += paddle->velocity.x;
         paddle->rect.x = paddle->position.x;
         paddle->rect.y = paddle->position.y;
     }
