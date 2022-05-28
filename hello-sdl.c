@@ -32,8 +32,7 @@ typedef struct {
 
 typedef struct {
     SDL_Rect rect;
-    int x_velocity;
-    int y_velocity;
+    Velocity velocity;
     Position position;
     int height;
     int width;
@@ -186,6 +185,8 @@ int initBall(Ball* ball) {
         ball->position.y = 295;
         ball->width = 10;
         ball->height = 10;
+        ball->velocity.x = 0;
+        ball->velocity.y = 0;
         ball->rect.x = ball->position.x;
         ball->rect.y = ball->position.y;
         ball->rect.w = ball->width;
