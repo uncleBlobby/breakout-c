@@ -52,6 +52,9 @@ typedef struct {
 int initPaddle();
 int initBall();
 
+void movePaddle();
+void updatePaddleState();
+
 void drawBoard();
 void drawPaddle();
 void drawBall();
@@ -106,16 +109,27 @@ int main(int argc, char* args[]) {
                     }
                 }
 
-                // update game state, draw the current frame
+            // update game state, draw the current frame
+            // update game state
+            // -- test: move paddle right
+            
+            movePaddle(paddle_ptr);
+            
+            
+            
+            
+            // draw current frame
+            // 1. grab the screen surface and paint it black
             screenSurface = SDL_GetWindowSurface(window);
-
             SDL_FillRect(screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0, 0, 0));
             
-
+            // 2. draw the board
             drawBoard(screenSurface, window, game_ptr);
+            // 3. draw the paddle
             drawPaddle(screenSurface, window, game_ptr, paddle);
+            // 4. draw the ball
             drawBall(screenSurface, window, game_ptr, ball);
-            //SDL_Delay(2000);
+            // 5. update the screen
             SDL_UpdateWindowSurface(window);
 
             }
@@ -168,6 +182,22 @@ int initBall(Ball* ball) {
     } else {
         printf("Error: ball is null.\n");
         return 1;
+    }
+}
+
+void movePaddle(Paddle* paddle) {
+    if (paddle){
+        // this works, now need to move the paddle with controls!
+        paddle->position.x -= 1;
+        updatePaddleState(paddle);
+        printf("Paddle position x: %d\n", paddle->position.x);
+    } 
+}
+
+void updatePaddleState(Paddle* paddle) {
+    if (paddle){
+        paddle->rect.x = paddle->position.x;
+        paddle->rect.y = paddle->position.y;
     }
 }
 
