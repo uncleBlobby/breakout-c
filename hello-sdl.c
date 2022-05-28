@@ -11,11 +11,6 @@ const int BRICK_WIDTH = 48;
 const int BRICK_HEIGHT = 20;
 
 typedef struct {
-    SDL_Renderer *renderer;
-    SDL_Window *window;
-} App;
-
-typedef struct {
     int x;
     int y;
 } Position;
@@ -113,7 +108,7 @@ int main(int argc, char* args[]) {
         exit(-1);
     } else {
         // Create Window
-        window = SDL_CreateWindow( "Hello SDL", 500, 500, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+        window = SDL_CreateWindow( "breakout.c", 500, 500, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
         if( window == NULL ){
             printf("Window could not be created. SDL_Error: %s\n", SDL_GetError());
         } else {
@@ -302,8 +297,8 @@ void checkBallBrickCollisions(Ball* ball, Brick* bricks) {
     if (ball){
         for (int i = 0; i < numBricks; i++) {
             if (SDL_HasIntersection(&ball->rect, &bricks[i].rect) && bricks[i].is_alive) {
-                printf("Collision detected.\n");
-                ball->position.y += 1;
+                //printf("Collision detected.\n");
+                ball->position.y += 2;
                 ball->velocity.y *= -1;
                 bricks[i].is_alive = false;
             }
