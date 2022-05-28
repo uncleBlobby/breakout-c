@@ -30,6 +30,8 @@ typedef struct {
     int x_velocity;
     int y_velocity;
     Position position;
+    int height;
+    int width;
 } Ball;
 
 typedef struct {
@@ -37,6 +39,8 @@ typedef struct {
     int x_velocity;
     int y_velocity;
     Position position;
+    int height;
+    int width;
 } Paddle;
 
 typedef struct {
@@ -45,8 +49,8 @@ typedef struct {
     Paddle paddle;
 } Game;
 
-
-
+int initPaddle();
+int initBall();
 
 void drawBoard();
 void drawPaddle();
@@ -57,13 +61,29 @@ int main(int argc, char* args[]) {
     Game game;
     Game* game_ptr = &game;
 
+    Paddle paddle;
+    Paddle* paddle_ptr = &paddle;
+
+    if (initPaddle(paddle_ptr) != 0) {
+        printf("Error: could not initialize paddle.\n");
+        return 1;
+    }
+
+    Ball ball;
+    Ball* ball_ptr = &ball;
+
+    if (initBall(ball_ptr) != 0) {
+        printf("Error: could not initialize ball.\n");
+        return 1;
+    }
+
     bool quit = false;
 
     SDL_Window* window = NULL;
 
     SDL_Surface* screenSurface = NULL;
 
-    printf("Initializing SDL.\n");
+    SDL_Log("Initializing SDL.\n");
 
     /* Initialize defaults, Video and Audio */
     if((SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) < 0)) {
@@ -93,8 +113,8 @@ int main(int argc, char* args[]) {
             
 
             drawBoard(screenSurface, window, game_ptr);
-            drawPaddle(screenSurface, window, game_ptr);
-            drawBall(screenSurface, window, game_ptr);
+            drawPaddle(screenSurface, window, game_ptr, paddle);
+            drawBall(screenSurface, window, game_ptr, ball);
             //SDL_Delay(2000);
             SDL_UpdateWindowSurface(window);
 
@@ -117,6 +137,40 @@ int main(int argc, char* args[]) {
     exit(0);
 }
 
+int initPaddle(Paddle* paddle) {
+    if (paddle){
+        paddle->position.x = 350;
+        paddle->position.y = 550;
+        paddle->width = 100;
+        paddle->height = 20;
+        paddle->rect.x = paddle->position.x;
+        paddle->rect.y = paddle->position.y;
+        paddle->rect.w = paddle->width;
+        paddle->rect.h = paddle->height;
+        return 0;
+    } else {
+        printf("Error: paddle is null.\n");
+        return 1;
+    }
+}
+
+int initBall(Ball* ball) {
+    if (ball){
+        ball->position.x = 395;
+        ball->position.y = 295;
+        ball->width = 10;
+        ball->height = 10;
+        ball->rect.x = ball->position.x;
+        ball->rect.y = ball->position.y;
+        ball->rect.w = ball->width;
+        ball->rect.h = ball->height;
+        return 0;
+    } else {
+        printf("Error: ball is null.\n");
+        return 1;
+    }
+}
+
 void drawBoard(SDL_Surface* screen, SDL_Window* window, Game* game) {
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 10; j++){
@@ -131,18 +185,14 @@ void drawBoard(SDL_Surface* screen, SDL_Window* window, Game* game) {
     //SDL_UpdateWindowSurface(window);
 }
 
-void drawPaddle(SDL_Surface* screen, SDL_Window* window, Game* game) {
-    SDL_Rect rect = {x: 350, y: 550, w: 100, h: 20};
-    Paddle paddle = {rect: rect, x_velocity: 0, y_velocity: 0};
-    game->paddle = paddle;
-    SDL_FillRect(screen, &rect, SDL_MapRGB( screen->format, 0, 255, 0));
+void drawPaddle(SDL_Surface* screen, SDL_Window* window, Game* game, Paddle paddle) {
+    //game->paddle = paddle;
+    SDL_FillRect(screen, &paddle.rect, SDL_MapRGB( screen->format, 0, 255, 0));
     //SDL_UpdateWindowSurface(window);
 }
 
-void drawBall(SDL_Surface* screen, SDL_Window* window, Game* game) {
-    SDL_Rect rect = {x: 395, y: 295, w: 10, h: 10};
-    Ball ball = {rect: rect, x_velocity: 0, y_velocity: 0};
-    game->ball = ball;
-    SDL_FillRect(screen, &rect, SDL_MapRGB( screen->format, 255, 255, 255));
+void drawBall(SDL_Surface* screen, SDL_Window* window, Game* game, Ball ball) {
+    //game->ball = ball;
+    SDL_FillRect(screen, &ball.rect, SDL_MapRGB( screen->format, 255, 255, 255));
     //SDL_UpdateWindowSurface(window);
 }
