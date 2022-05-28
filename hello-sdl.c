@@ -59,6 +59,10 @@ void movePaddle();
 void stopPaddle();
 void updatePaddleState();
 
+//void moveBall();
+void startBall();
+void updateBallState();
+
 void drawBoard();
 void drawPaddle();
 void drawBall();
@@ -114,6 +118,7 @@ int main(int argc, char* args[]) {
 
                     if( event.type == SDL_KEYDOWN ){
                         movePaddle(paddle_ptr, event.key.keysym.sym);
+                        startBall(ball_ptr, event.key.keysym.sym);
                     }
                     if( event.type == SDL_KEYUP ){
                         stopPaddle(paddle_ptr);
@@ -125,6 +130,7 @@ int main(int argc, char* args[]) {
             // -- test: move paddle right
             
             updatePaddleState(paddle_ptr);
+            updateBallState(ball_ptr, paddle);
             
             
             // draw current frame
@@ -201,11 +207,11 @@ int initBall(Ball* ball) {
 void movePaddle(Paddle* paddle, SDL_KeyCode key) {
     if (paddle){
         if (key == SDLK_a){
-            printf("Pressing a.\n");
+            //printf("Pressing a.\n");
             paddle->velocity.x = -1;
         }
         if (key == SDLK_d){
-            printf("Pressing d.\n");
+            //printf("Pressing d.\n");
             paddle->velocity.x = 1;
         }
     }
@@ -222,6 +228,43 @@ void updatePaddleState(Paddle* paddle) {
         paddle->position.x += paddle->velocity.x;
         paddle->rect.x = paddle->position.x;
         paddle->rect.y = paddle->position.y;
+    }
+}
+
+void startBall(Ball* ball, SDL_KeyCode key) {
+    if (ball){
+        if (key == SDLK_SPACE){
+            if (ball->velocity.x == 0 && ball->velocity.y == 0){
+                ball->velocity.x = 1;
+                ball->velocity.y = 1;
+            }
+        }
+        
+    }
+}
+
+void updateBallState(Ball* ball, Paddle paddle) {
+    if (ball){
+        // only update the ball's position every other frame (too fast)
+        if (SDL_GetTicks() % 2 == 0) {
+            // reverse the ball's x velocity at outer bounds
+            if (ball->position.x <= 0 || ball->position.x >= SCREEN_WIDTH - ball->width) {
+                ball->velocity.x *= -1;
+            }
+            if (ball->position.y <= 0 || ball->position.y >= SCREEN_HEIGHT - ball->height) {
+                ball->velocity.y *= -1;
+            }
+            if (ball->position.y == (paddle.position.y)) {
+                if ((ball->position.x >= paddle.position.x) && (ball->position.x <= paddle.position.x + paddle.width)) {
+                    ball->velocity.y *= -1;
+                }
+            } 
+                
+            ball->position.x += ball->velocity.x;
+            ball->position.y += ball->velocity.y;
+            ball->rect.x = ball->position.x;
+            ball->rect.y = ball->position.y;
+        }
     }
 }
 
