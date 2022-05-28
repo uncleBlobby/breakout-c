@@ -54,6 +54,7 @@ typedef struct {
 
 int initPaddle();
 int initBall();
+int initBricks();
 
 void movePaddle();
 void stopPaddle();
@@ -62,15 +63,23 @@ void updatePaddleState();
 //void moveBall();
 void startBall();
 void updateBallState();
+void checkBallBrickCollisions();
 
-void drawBoard();
+void initBoard();
+
 void drawPaddle();
 void drawBall();
+void drawLiveBricks();
 
 int main(int argc, char* args[]) {
 
     Game game;
     Game* game_ptr = &game;
+
+    if (initBricks(game_ptr) != 0) {
+        printf("Error initializing bricks\n");
+        return 1;
+    }
 
     Paddle paddle;
     Paddle* paddle_ptr = &paddle;
@@ -88,12 +97,14 @@ int main(int argc, char* args[]) {
         return 1;
     }
 
+
     bool quit = false;
 
     SDL_Window* window = NULL;
 
     SDL_Surface* screenSurface = NULL;
 
+    //initBoard(screenSurface, window, game_ptr);
     SDL_Log("Initializing SDL.\n");
 
     /* Initialize defaults, Video and Audio */
@@ -131,7 +142,7 @@ int main(int argc, char* args[]) {
             
             updatePaddleState(paddle_ptr);
             updateBallState(ball_ptr, paddle);
-            
+            checkBallBrickCollisions(ball_ptr, game_ptr->bricks);
             
             // draw current frame
             // 1. grab the screen surface and paint it black
@@ -139,7 +150,7 @@ int main(int argc, char* args[]) {
             SDL_FillRect(screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0, 0, 0));
             
             // 2. draw the board
-            drawBoard(screenSurface, window, game_ptr);
+            drawLiveBricks(screenSurface, window, game);
             // 3. draw the paddle
             drawPaddle(screenSurface, window, game_ptr, paddle);
             // 4. draw the ball
@@ -200,6 +211,24 @@ int initBall(Ball* ball) {
         return 0;
     } else {
         printf("Error: ball is null.\n");
+        return 1;
+    }
+}
+
+int initBricks(Game* game) {
+    if (game){
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 10; j++) {
+                game->bricks[i][j].rect.x = 1 + (i * (BRICK_WIDTH + 2));
+                game->bricks[i][j].rect.y = 1 + (j * (BRICK_HEIGHT + 2));
+                game->bricks[i][j].rect.w = BRICK_WIDTH;
+                game->bricks[i][j].rect.h = BRICK_HEIGHT;
+                game->bricks[i][j].is_alive = true;
+            }
+        }
+        return 0;
+    } else {
+        printf("Error: game is null.\n");
         return 1;
     }
 }
@@ -268,7 +297,21 @@ void updateBallState(Ball* ball, Paddle paddle) {
     }
 }
 
-void drawBoard(SDL_Surface* screen, SDL_Window* window, Game* game) {
+void checkBallBrickCollisions(Ball* ball, Brick* bricks) {
+    int numBricks = 160;
+    if (ball){
+        for (int i = 0; i < numBricks; i++) {
+            if (SDL_HasIntersection(&ball->rect, &bricks[i].rect) && bricks[i].is_alive) {
+                printf("Collision detected.\n");
+                ball->position.y += 1;
+                ball->velocity.y *= -1;
+                bricks[i].is_alive = false;
+            }
+        }
+    }
+}
+
+void initBoard(SDL_Surface* screen, SDL_Window* window, Game* game) {
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 10; j++){
             Brick newBrick;
@@ -277,6 +320,17 @@ void drawBoard(SDL_Surface* screen, SDL_Window* window, Game* game) {
             newBrick.is_alive = true;
             game->bricks[i][j] = newBrick;
             SDL_FillRect(screen, &rect, SDL_MapRGB( screen->format, 255, 0, 0));
+        }
+    }
+    //SDL_UpdateWindowSurface(window);
+}
+
+void drawLiveBricks(SDL_Surface* screen, SDL_Window* window, Game game) {
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < 10; j++){
+            if (game.bricks[i][j].is_alive) {
+                SDL_FillRect(screen, &game.bricks[i][j].rect, SDL_MapRGB( screen->format, 255, 0, 0));
+            }
         }
     }
     //SDL_UpdateWindowSurface(window);
