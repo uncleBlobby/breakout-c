@@ -3,7 +3,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 
-//Screen dimension constants
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
@@ -50,18 +49,13 @@ typedef struct {
 int initPaddle();
 int initBall();
 int initBricks();
-
 void movePaddle();
 void stopPaddle();
 void updatePaddleState();
-
-//void moveBall();
 void startBall();
 void updateBallState();
 void checkBallBrickCollisions();
-
 void initBoard();
-
 void drawPaddle();
 void drawBall();
 void drawLiveBricks();
@@ -92,22 +86,15 @@ int main(int argc, char* args[]) {
         return 1;
     }
 
-
     bool quit = false;
-
     SDL_Window* window = NULL;
-
     SDL_Surface* screenSurface = NULL;
 
-    //initBoard(screenSurface, window, game_ptr);
     SDL_Log("Initializing SDL.\n");
-
-    /* Initialize defaults, Video and Audio */
     if((SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) < 0)) {
         printf("Could not initialize SDL: %s.\n", SDL_GetError());
         exit(-1);
     } else {
-        // Create Window
         window = SDL_CreateWindow( "breakout.c", 500, 500, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
         if( window == NULL ){
             printf("Window could not be created. SDL_Error: %s\n", SDL_GetError());
@@ -115,13 +102,11 @@ int main(int argc, char* args[]) {
             while (!quit) {
                 SDL_Event event;
                 while (SDL_PollEvent(&event)){
-                    // decide what to do with the current event
                     if( event.type == SDL_QUIT){
                         quit = true;
                         SDL_Log("Program exited.");
                         break;
                     }
-
                     if( event.type == SDL_KEYDOWN ){
                         movePaddle(paddle_ptr, event.key.keysym.sym);
                         startBall(ball_ptr, event.key.keysym.sym);
@@ -130,43 +115,23 @@ int main(int argc, char* args[]) {
                         stopPaddle(paddle_ptr);
                     } 
                 }
-
-            // update game state, draw the current frame
-            // update game state
-            // -- test: move paddle right
-            
             updatePaddleState(paddle_ptr);
             updateBallState(ball_ptr, paddle);
             checkBallBrickCollisions(ball_ptr, game_ptr->bricks);
-            
-            // draw current frame
-            // 1. grab the screen surface and paint it black
             screenSurface = SDL_GetWindowSurface(window);
             SDL_FillRect(screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0, 0, 0));
-            
-            // 2. draw the board
             drawLiveBricks(screenSurface, window, game);
-            // 3. draw the paddle
             drawPaddle(screenSurface, window, game_ptr, paddle);
-            // 4. draw the ball
             drawBall(screenSurface, window, game_ptr, ball);
-            // 5. update the screen
             SDL_UpdateWindowSurface(window);
-
             }
-
         }
     }
 
     SDL_DestroyWindow(window);
-
     printf("SDL initialized.\n");
-
     printf("Quitting SDL.\n");
-
-    /* Shutdown all subsystems (Video, Audio, etc) */
     SDL_Quit();
-
     printf("Quitting...\n");
 
     exit(0);
@@ -231,11 +196,9 @@ int initBricks(Game* game) {
 void movePaddle(Paddle* paddle, SDL_KeyCode key) {
     if (paddle){
         if (key == SDLK_a){
-            //printf("Pressing a.\n");
             paddle->velocity.x = -1;
         }
         if (key == SDLK_d){
-            //printf("Pressing d.\n");
             paddle->velocity.x = 1;
         }
     }
@@ -269,9 +232,7 @@ void startBall(Ball* ball, SDL_KeyCode key) {
 
 void updateBallState(Ball* ball, Paddle paddle) {
     if (ball){
-        // only update the ball's position every other frame (too fast)
         if (SDL_GetTicks() % 2 == 0) {
-            // reverse the ball's x velocity at outer bounds
             if (ball->position.x <= 0 || ball->position.x >= SCREEN_WIDTH - ball->width) {
                 ball->velocity.x *= -1;
             }
@@ -282,8 +243,7 @@ void updateBallState(Ball* ball, Paddle paddle) {
                 if ((ball->position.x >= paddle.position.x) && (ball->position.x <= paddle.position.x + paddle.width)) {
                     ball->velocity.y *= -1;
                 }
-            } 
-                
+            }     
             ball->position.x += ball->velocity.x;
             ball->position.y += ball->velocity.y;
             ball->rect.x = ball->position.x;
@@ -297,7 +257,6 @@ void checkBallBrickCollisions(Ball* ball, Brick* bricks) {
     if (ball){
         for (int i = 0; i < numBricks; i++) {
             if (SDL_HasIntersection(&ball->rect, &bricks[i].rect) && bricks[i].is_alive) {
-                //printf("Collision detected.\n");
                 ball->position.y += 2;
                 ball->velocity.y *= -1;
                 bricks[i].is_alive = false;
@@ -317,7 +276,6 @@ void initBoard(SDL_Surface* screen, SDL_Window* window, Game* game) {
             SDL_FillRect(screen, &rect, SDL_MapRGB( screen->format, 255, 0, 0));
         }
     }
-    //SDL_UpdateWindowSurface(window);
 }
 
 void drawLiveBricks(SDL_Surface* screen, SDL_Window* window, Game game) {
@@ -328,17 +286,12 @@ void drawLiveBricks(SDL_Surface* screen, SDL_Window* window, Game game) {
             }
         }
     }
-    //SDL_UpdateWindowSurface(window);
 }
 
 void drawPaddle(SDL_Surface* screen, SDL_Window* window, Game* game, Paddle paddle) {
-    //game->paddle = paddle;
     SDL_FillRect(screen, &paddle.rect, SDL_MapRGB( screen->format, 0, 255, 0));
-    //SDL_UpdateWindowSurface(window);
 }
 
 void drawBall(SDL_Surface* screen, SDL_Window* window, Game* game, Ball ball) {
-    //game->ball = ball;
     SDL_FillRect(screen, &ball.rect, SDL_MapRGB( screen->format, 255, 255, 255));
-    //SDL_UpdateWindowSurface(window);
 }
