@@ -5,7 +5,6 @@
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-
 const int BRICK_WIDTH = 48;
 const int BRICK_HEIGHT = 20;
 
@@ -61,35 +60,27 @@ void drawBall();
 void drawLiveBricks();
 
 int main(int argc, char* args[]) {
-
     Game game;
     Game* game_ptr = &game;
-
     if (initBricks(game_ptr) != 0) {
         printf("Error initializing bricks\n");
         return 1;
     }
-
     Paddle paddle;
     Paddle* paddle_ptr = &paddle;
-
     if (initPaddle(paddle_ptr) != 0) {
         printf("Error: could not initialize paddle.\n");
         return 1;
     }
-
     Ball ball;
     Ball* ball_ptr = &ball;
-
     if (initBall(ball_ptr) != 0) {
         printf("Error: could not initialize ball.\n");
         return 1;
     }
-
     bool quit = false;
     SDL_Window* window = NULL;
     SDL_Surface* screenSurface = NULL;
-
     SDL_Log("Initializing SDL.\n");
     if((SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) < 0)) {
         printf("Could not initialize SDL: %s.\n", SDL_GetError());
@@ -127,13 +118,11 @@ int main(int argc, char* args[]) {
             }
         }
     }
-
     SDL_DestroyWindow(window);
     printf("SDL initialized.\n");
     printf("Quitting SDL.\n");
     SDL_Quit();
     printf("Quitting...\n");
-
     exit(0);
 }
 
@@ -225,8 +214,7 @@ void startBall(Ball* ball, SDL_KeyCode key) {
                 ball->velocity.x = 1;
                 ball->velocity.y = 1;
             }
-        }
-        
+        } 
     }
 }
 
