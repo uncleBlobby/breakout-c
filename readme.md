@@ -5,18 +5,18 @@ Quick implementation of classic ["Breakout" style brick-breaking game, developed
 
 The current project is about 280 lines of code and produces an executable 26 KB in size.
 
-## Dependencies
 ***
+## Dependencies
 
 - MAKE
 - SDL2 development library
 - GCC 
 
-## Installation
 ***
+## Installation
+
 
 ### Linux
-***
 
 When all dependencies are installed, simply run:
 
@@ -41,8 +41,8 @@ or for more verbose error logging:
 gcc hello-sdl.c -Wall -Werror -lSDL2 -o hello-sdl
 ```
 
-## Controls
 ***
+## Controls
 
 ```
 [spacebar]  - initialize ball
@@ -50,10 +50,11 @@ a           - move paddle left
 d           - move paddle right
 ```
 
-## Changelog
 ***
+## Changelog
 
 2022-05-29
+***
 
 Added readme file.
 
@@ -66,13 +67,14 @@ Began work on "extra lives" mechanic.
 Began work on "score" mechanic.
 
 2022-05-28
+***
 
 Finished MVP.  
 
 BREAKOUT.C now features collisions (with paddle, with bricks) and bricks are successfully removed from the screen as they are collided.  Paddle movement is working, but not yet constrained to the boundaries of the screen.  Ball movement is satisfactory, however have not yet implemented a "loss" mechanic when the paddle actually misses the ball -- currently, ball will simply bounce off the bottom of the screen as it would any other wall.  
 
-## Todos:
 ***
+## Todos:
 
 - [x] Restrain paddle movement to window bounds.  Player should not be able to move the paddle off the screen!
 - [ ] Introduce "lives" / "extra balls" mechanic: player ought to start with a limited number of attempts (ie: 3) and lose one every time the ball is missed by the paddle and travels through the southern wall.
@@ -90,4 +92,6 @@ BREAKOUT.C now features collisions (with paddle, with bricks) and bricks are suc
 - [ ] Change paddle rebound mechanics: treat paddle as if it were slightly curved (upward in the center) in order to further diversify the core rebound mechanic.  Currently the velocity changes in a very predictable way, and only certain angles of return are available to the player.  ie: no matter which part of the paddle the ball bounces from, the velocity currently changes in the exact same manner -- making the gameplay very predictable and boring.
 - [ ] Multiple Brick Colors: original breakout had bricks ranging from yellow (lowest bricks) to green, to orange, to red (highest bricks near top of screen), each different color of bricks was worth more points.
 - [ ] Increase Ball Speed ???: original breakout increased ball speed after a certain number of hits, and after breaking through different layers of the wall.
-- [ ] Powerups ???: later versions of breakout had powerups which would "drop" to the player on the destruction of random bricks.  Some powerups included: multiple balls, increased paddle width, sticky paddle, and so on.  
+- [ ] Powerups ???: later versions of breakout had powerups which would "drop" to the player on the destruction of random bricks.  Some powerups included: multiple balls, increased paddle width, sticky paddle, and so on.
+
+***
