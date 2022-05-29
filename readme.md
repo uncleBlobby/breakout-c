@@ -66,12 +66,12 @@ BREAKOUT.C now features collisions (with paddle, with bricks) and bricks are suc
 ## Todos:
 ***
 
-- Restrain paddle movement to window bounds.  Player should not be able to move the paddle off the screen!
-- Introduce "lives" / "extra balls" mechanic: player ought to start with a limited number of attempts (ie: 3) and lose one every time the ball is missed by the paddle and travels through the southern wall.
-- Introduce "restart" mechanic: after play has lost a ball to the southern wall, using spacebar should restart the game (as it does in the first initialization).
-- Introduce sound effect mechanics: ball hit paddle, ball hit wall, player loses ball, ball hit brick all may have different types of 'blip' sound effect.
-- Introduce score keeping mechanic: each successful brick destroyed ought to increase a score counter -- perhaps a multiplier for extra bricks destroyed before the ball returns to the paddle (score multiplier resets every time the ball hits the paddle).
-- Change paddle rebound mechanics: treat paddle as if it were slightly curved (upward in the center) in order to further diversify the core rebound mechanic.  Currently the velocity changes in a very predictable way, and only certain angles of return are available to the player.  ie: no matter which part of the paddle the ball bounces from, the velocity currently changes in the exact same manner -- making the gameplay very predictable and boring.
-- Multiple Brick Colors: original breakout had bricks ranging from yellow (lowest bricks) to green, to orange, to red (highest bricks near top of screen), each different color of bricks was worth more points.
-- Increase Ball Speed ???: original breakout increased ball speed after a certain number of hits, and after breaking through different layers of the wall.
-- Powerups ???: later versions of breakout had powerups which would "drop" to the player on the destruction of random bricks.  Some powerups included: multiple balls, increased paddle width, sticky paddle, and so on.  
+- [ ] Restrain paddle movement to window bounds.  Player should not be able to move the paddle off the screen!
+- [ ] Introduce "lives" / "extra balls" mechanic: player ought to start with a limited number of attempts (ie: 3) and lose one every time the ball is missed by the paddle and travels through the southern wall.
+- [ ] Introduce "restart" mechanic: after play has lost a ball to the southern wall, using spacebar should restart the game (as it does in the first initialization).
+- [ ] Introduce sound effect mechanics: ball hit paddle, ball hit wall, player loses ball, ball hit brick all may have different types of 'blip' sound effect.
+- [ ] Introduce score keeping mechanic: each successful brick destroyed ought to increase a score counter -- perhaps a multiplier for extra bricks destroyed before the ball returns to the paddle (score multiplier resets every time the ball hits the paddle).
+- [ ] Change paddle rebound mechanics: treat paddle as if it were slightly curved (upward in the center) in order to further diversify the core rebound mechanic.  Currently the velocity changes in a very predictable way, and only certain angles of return are available to the player.  ie: no matter which part of the paddle the ball bounces from, the velocity currently changes in the exact same manner -- making the gameplay very predictable and boring.
+- [ ] Multiple Brick Colors: original breakout had bricks ranging from yellow (lowest bricks) to green, to orange, to red (highest bricks near top of screen), each different color of bricks was worth more points.
+- [ ] Increase Ball Speed ???: original breakout increased ball speed after a certain number of hits, and after breaking through different layers of the wall.
+- [ ] Powerups ???: later versions of breakout had powerups which would "drop" to the player on the destruction of random bricks.  Some powerups included: multiple balls, increased paddle width, sticky paddle, and so on.  
