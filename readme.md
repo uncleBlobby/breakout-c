@@ -57,6 +57,14 @@ d           - move paddle right
 
 Added readme file.
 
+Added detailed todos.
+
+Completed paddle restraints (clamped paddle to screen width so player can no longer move paddle off-screen).
+
+Began work on "extra lives" mechanic.
+
+Began work on "score" mechanic.
+
 2022-05-28
 
 Finished MVP.  
@@ -76,7 +84,7 @@ BREAKOUT.C now features collisions (with paddle, with bricks) and bricks are suc
     - [x] Add "beep.wav" sound effect for future use.
 - [ ] Introduce score keeping mechanic: each successful brick destroyed ought to increase a score counter -- perhaps a multiplier for extra bricks destroyed before the ball returns to the paddle (score multiplier resets every time the ball hits the paddle).
     - [x] Add score field to game struct.
-    - [ ] Increment score (+ 10 points) for every brick destroyed.
+    - [x] Increment score (+ 10 points) for every brick destroyed.
     - [ ] Introduce multiplier for more bricks broken between each paddle hit (combo scoring).
     - [ ] Learn how to render fonts and draw score to screen (bottom right?).
 - [ ] Change paddle rebound mechanics: treat paddle as if it were slightly curved (upward in the center) in order to further diversify the core rebound mechanic.  Currently the velocity changes in a very predictable way, and only certain angles of return are available to the player.  ie: no matter which part of the paddle the ball bounces from, the velocity currently changes in the exact same manner -- making the gameplay very predictable and boring.
