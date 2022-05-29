@@ -231,12 +231,20 @@ int initBricks(Game* game) {
 void movePaddle(Paddle* paddle, SDL_KeyCode key) {
     if (paddle){
         if (key == SDLK_a){
-            //printf("Pressing a.\n");
             paddle->velocity.x = -1;
+            // clamp velocity to zero if paddle tries to leave screen (left)
+            if (paddle->position.x <= 0) {
+                paddle->velocity.x = 0;
+                paddle->position.x =0;
+            }
         }
         if (key == SDLK_d){
-            //printf("Pressing d.\n");
             paddle->velocity.x = 1;
+            // clamp velocity to zero if paddle tries to leave screen (right)
+            if (paddle->position.x + paddle->width >= SCREEN_WIDTH) {
+                paddle->velocity.x = 0;
+                paddle->position.x = SCREEN_WIDTH - paddle->width;
+            }
         }
     }
 }
@@ -252,6 +260,16 @@ void updatePaddleState(Paddle* paddle) {
         paddle->position.x += paddle->velocity.x;
         paddle->rect.x = paddle->position.x;
         paddle->rect.y = paddle->position.y;
+        // clamp paddle rendering to screen (left)
+        if (paddle->position.x <= 0) {
+            paddle->position.x = 0;
+            paddle->rect.x = 0;
+        }
+        // clamp paddle rendering to screen (right)
+        if (paddle->position.x + paddle->width >= SCREEN_WIDTH) {
+            paddle->position.x = SCREEN_WIDTH - paddle->width;
+            paddle->rect.x = SCREEN_WIDTH - paddle->width;
+        }
     }
 }
 

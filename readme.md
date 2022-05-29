@@ -66,7 +66,7 @@ BREAKOUT.C now features collisions (with paddle, with bricks) and bricks are suc
 ## Todos:
 ***
 
-- [ ] Restrain paddle movement to window bounds.  Player should not be able to move the paddle off the screen!
+- [x] Restrain paddle movement to window bounds.  Player should not be able to move the paddle off the screen!
 - [ ] Introduce "lives" / "extra balls" mechanic: player ought to start with a limited number of attempts (ie: 3) and lose one every time the ball is missed by the paddle and travels through the southern wall.
 - [ ] Introduce "restart" mechanic: after play has lost a ball to the southern wall, using spacebar should restart the game (as it does in the first initialization).
 - [ ] Introduce sound effect mechanics: ball hit paddle, ball hit wall, player loses ball, ball hit brick all may have different types of 'blip' sound effect.
