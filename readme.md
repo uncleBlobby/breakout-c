@@ -68,9 +68,17 @@ BREAKOUT.C now features collisions (with paddle, with bricks) and bricks are suc
 
 - [x] Restrain paddle movement to window bounds.  Player should not be able to move the paddle off the screen!
 - [ ] Introduce "lives" / "extra balls" mechanic: player ought to start with a limited number of attempts (ie: 3) and lose one every time the ball is missed by the paddle and travels through the southern wall.
-- [ ] Introduce "restart" mechanic: after play has lost a ball to the southern wall, using spacebar should restart the game (as it does in the first initialization).
+    - [x] Display extra lives in bottom left corner of screen.
+    - [x] Add lives field to game struct.
+    - [ ] Remove life on ball exit screen south.
+    - [ ] Introduce mechanic to respawn ball after loss of life -- after player has lost a ball, using spacebar should restart the game.
 - [ ] Introduce sound effect mechanics: ball hit paddle, ball hit wall, player loses ball, ball hit brick all may have different types of 'blip' sound effect.
+    - [x] Add "beep.wav" sound effect for future use.
 - [ ] Introduce score keeping mechanic: each successful brick destroyed ought to increase a score counter -- perhaps a multiplier for extra bricks destroyed before the ball returns to the paddle (score multiplier resets every time the ball hits the paddle).
+    - [x] Add score field to game struct.
+    - [ ] Increment score (+ 10 points) for every brick destroyed.
+    - [ ] Introduce multiplier for more bricks broken between each paddle hit (combo scoring).
+    - [ ] Learn how to render fonts and draw score to screen (bottom right?).
 - [ ] Change paddle rebound mechanics: treat paddle as if it were slightly curved (upward in the center) in order to further diversify the core rebound mechanic.  Currently the velocity changes in a very predictable way, and only certain angles of return are available to the player.  ie: no matter which part of the paddle the ball bounces from, the velocity currently changes in the exact same manner -- making the gameplay very predictable and boring.
 - [ ] Multiple Brick Colors: original breakout had bricks ranging from yellow (lowest bricks) to green, to orange, to red (highest bricks near top of screen), each different color of bricks was worth more points.
 - [ ] Increase Ball Speed ???: original breakout increased ball speed after a certain number of hits, and after breaking through different layers of the wall.
