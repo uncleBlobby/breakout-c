@@ -53,8 +53,7 @@ d           - move paddle right
 ***
 ## Changelog
 
-2022-05-29
-***
+### 2022-05-29
 
 Added readme file.
 
@@ -66,8 +65,8 @@ Began work on "extra lives" mechanic.
 
 Began work on "score" mechanic.
 
-2022-05-28
 ***
+### 2022-05-28
 
 Finished MVP.  
 
