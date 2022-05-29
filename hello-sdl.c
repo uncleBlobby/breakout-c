@@ -45,11 +45,13 @@ typedef struct {
     Brick bricks[16][10];
     Ball ball;
     Paddle paddle;
+    int lives;
 } Game;
 
 int initPaddle();
 int initBall();
 int initBricks();
+int initLives();
 
 void movePaddle();
 void stopPaddle();
@@ -66,6 +68,8 @@ void drawPaddle();
 void drawBall();
 void drawLiveBricks();
 
+void drawLivesDisplay();
+
 int main(int argc, char* args[]) {
 
     Game game;
@@ -73,6 +77,11 @@ int main(int argc, char* args[]) {
 
     if (initBricks(game_ptr) != 0) {
         printf("Error initializing bricks\n");
+        return 1;
+    }
+
+    if (initLives(game_ptr) != 0) {
+        printf("Error initializing lives\n");
         return 1;
     }
 
@@ -150,7 +159,9 @@ int main(int argc, char* args[]) {
             drawPaddle(screenSurface, window, game_ptr, paddle);
             // 4. draw the ball
             drawBall(screenSurface, window, game_ptr, ball);
-            // 5. update the screen
+            // 5. draw the lives display
+            drawLivesDisplay(screenSurface, window, game);
+            // 6. update the screen
             SDL_UpdateWindowSurface(window);
 
             }
@@ -221,6 +232,16 @@ int initBricks(Game* game) {
                 game->bricks[i][j].is_alive = true;
             }
         }
+        return 0;
+    } else {
+        printf("Error: game is null.\n");
+        return 1;
+    }
+}
+
+int initLives(Game* game) {
+    if (game){
+        game->lives = 3;
         return 0;
     } else {
         printf("Error: game is null.\n");
@@ -359,4 +380,13 @@ void drawBall(SDL_Surface* screen, SDL_Window* window, Game* game, Ball ball) {
     //game->ball = ball;
     SDL_FillRect(screen, &ball.rect, SDL_MapRGB( screen->format, 255, 255, 255));
     //SDL_UpdateWindowSurface(window);
+}
+
+void drawLivesDisplay(SDL_Surface* screen, SDL_Window* window, Game game){
+    int lives = game.lives;
+
+    for (int i = 0; i < lives; i++){
+        SDL_Rect rect = {x: (5 + (i * 15)), y: (SCREEN_HEIGHT - 15), w: 10, h: 10};
+        SDL_FillRect(screen, &rect, SDL_MapRGB( screen->format, 255, 255, 255));
+    }
 }
