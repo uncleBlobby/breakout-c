@@ -328,8 +328,12 @@ void updateBallState(Ball* ball, Paddle paddle) {
             if (ball->position.y <= 0 || ball->position.y >= SCREEN_HEIGHT - ball->height) {
                 ball->velocity.y *= -1;
             }
+            // check if ball is at paddle height
             if (ball->position.y == (paddle.position.y)) {
+                // check if ball is inside paddle width
                 if ((ball->position.x >= paddle.position.x) && (ball->position.x <= paddle.position.x + paddle.width)) {
+                    // if ball is inside paddle width, reverse the ball's y velocity
+                    // TODO: change velocity depending on where the ball is relative to the paddle
                     ball->velocity.y *= -1;
                 }
             } 
