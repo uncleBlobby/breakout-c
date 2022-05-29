@@ -46,12 +46,14 @@ typedef struct {
     Ball ball;
     Paddle paddle;
     int lives;
+    int score;
 } Game;
 
 int initPaddle();
 int initBall();
 int initBricks();
 int initLives();
+int initGame();
 
 void movePaddle();
 void stopPaddle();
@@ -75,13 +77,8 @@ int main(int argc, char* args[]) {
     Game game;
     Game* game_ptr = &game;
 
-    if (initBricks(game_ptr) != 0) {
-        printf("Error initializing bricks\n");
-        return 1;
-    }
-
-    if (initLives(game_ptr) != 0) {
-        printf("Error initializing lives\n");
+    if (initGame(game_ptr) != 0) {
+        printf("Error initializing game\n");
         return 1;
     }
 
@@ -127,6 +124,7 @@ int main(int argc, char* args[]) {
                     // decide what to do with the current event
                     if( event.type == SDL_QUIT){
                         quit = true;
+                        printf("Score: %d\n", game.score);
                         SDL_Log("Program exited.");
                         break;
                     }
@@ -146,7 +144,7 @@ int main(int argc, char* args[]) {
             
             updatePaddleState(paddle_ptr);
             updateBallState(ball_ptr, paddle);
-            checkBallBrickCollisions(ball_ptr, game_ptr->bricks);
+            checkBallBrickCollisions(ball_ptr, game_ptr->bricks, game_ptr);
             
             // draw current frame
             // 1. grab the screen surface and paint it black
@@ -219,6 +217,19 @@ int initBall(Ball* ball) {
         printf("Error: ball is null.\n");
         return 1;
     }
+}
+
+int initGame(Game* game) {
+    game->score = 0;
+    if (initBricks(game) != 0) {
+        printf("Error initializing bricks\n");
+        return 1;
+    }
+    if (initLives(game) != 0) {
+        printf("Error initializing lives\n");
+        return 1;
+    }
+    return 0;
 }
 
 int initBricks(Game* game) {
@@ -331,7 +342,7 @@ void updateBallState(Ball* ball, Paddle paddle) {
     }
 }
 
-void checkBallBrickCollisions(Ball* ball, Brick* bricks) {
+void checkBallBrickCollisions(Ball* ball, Brick* bricks, Game* game) {
     int numBricks = 160;
     if (ball){
         for (int i = 0; i < numBricks; i++) {
@@ -340,6 +351,7 @@ void checkBallBrickCollisions(Ball* ball, Brick* bricks) {
                 ball->position.y += 2;
                 ball->velocity.y *= -1;
                 bricks[i].is_alive = false;
+                game->score += 10;
             }
         }
     }
